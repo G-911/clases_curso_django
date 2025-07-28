@@ -1,0 +1,11 @@
+## 📚 Cómo ejecutar cada clase
+
+En este repositorio encontrarás múltiples carpetas, cada una correspondiente a una clase diferente del curso. Para ejecutar una clase específica, sigue estos pasos:
+
+1. Abre tu terminal.
+2. Usa el comando `cd` para acceder a la carpeta del proyecto que deseas ejecutar:
+
+```bash
+cd '<nombre-de-la-carpeta-de-la-clase>'
+
+⚠️ Importante: Asegúrate de que estás dentro de la carpeta correcta antes de ejecutar comandos como python manage.py runserver, instalar dependencias o activar el entorno virtual.

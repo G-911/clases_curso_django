@@ -1,0 +1,128 @@
+# 🧠 Clase 1: Instalación de Django y Visualización de Nuestro Primer HTML
+
+Esta clase forma parte del curso de Django. Su propósito es introducir a los estudiantes en la estructura básica de un proyecto Django y guiarlos en la creación de una primera página web utilizando una plantilla HTML.
+
+---
+
+## 🎯 Objetivo de la Clase
+
+- Instalar Django y configurar el entorno del proyecto.
+- Definir la ruta de la carpeta `templates` en el archivo `settings.py`.
+- Crear una vista simple que renderice una plantilla HTML.
+- Configurar el archivo `urls.py` para que esa vista se muestre en el navegador.
+
+---
+
+## 🛠️ ¿Qué aprenderás?
+
+- Cómo preparar un entorno virtual y ejecutar tu servidor local.
+- Qué papel cumplen las plantillas HTML en Django.
+- Cómo estructurar las vistas del proyecto utilizando clases.
+- Cómo vincular vistas y rutas para mostrar contenido en pantalla.
+
+---
+
+# 🚀 Guía Paso a Paso para Instalar y Configurar el Proyecto Django
+
+Este proyecto forma parte del curso de Django. A continuación se detallan los pasos necesarios para preparar el entorno y cargar tu primera plantilla HTML.
+
+---
+
+## 📌 Nota Importante
+
+Para crear el proyecto Django desde cero, usa el siguiente comando en la terminal:
+
+```bash
+django-admin startproject <nombre-del-proyecto> .
+
+No olvidar el espacio punto despues del nombre del proyecto
+
+---
+
+## 🔧 1. Requisitos Previos
+
+Antes de comenzar, asegúrate de tener instalado lo siguiente:
+
+- ✅ Python 3.10 o superior
+- ✅ pip (gestor de paquetes de Python)
+- ✅ virtualenv (opcional pero recomendado)
+
+---
+
+## 📁 2. Clonar el Repositorio
+
+Descarga el código del proyecto desde GitHub:
+
+```bash
+git clone https://github.com/G-911/clases_curso_django.git
+cd CursoDjango
+cd 01-Instalar_y_configurar_django_para_mostrar_un_html
+
+
+## 🐍 3. Crear y Activar un Entorno Virtual
+Este entorno te ayudará a gestionar las dependencias de forma aislada:
+python -m venv env  # Crea el entorno virtual
+
+# Activa el entorno:
+source env/bin/activate     # Linux/macOS
+env\Scripts\activate        # Windows
+
+---
+
+## 📦 4. Instalar las Dependencias
+Instala las librerías necesarias para el proyecto:
+pip install -r requirements.txt
+
+---
+
+## 🗂️ 5. Crear Carpeta de Templates
+En la raíz del proyecto, crea una carpeta llamada templates para tus archivos HTML:
+clases_curso_django/
+├── templates/
+│   └── home.html
+
+---
+
+## ⚙️ 6. Configurar Django para Usar Templates
+Edita el archivo settings.py ubicado en django_project/. En la sección TEMPLATES, actualiza la configuración para incluir tu carpeta de templates:
+TEMPLATES = [
+    {
+        'DIRS': [BASE_DIR / 'templates'],
+        ...
+    },
+]
+
+---
+
+## 👁️ 7. Crear Archivo de Vistas (views.py)
+Crea un archivo llamado views.py dentro de django_project/ y define una vista que renderice tu HTML:
+from django.views.generic import TemplateView
+
+class HomeView(TemplateView):
+    template_name = "home.html"
+
+---
+
+## 🛣️ 8. Configurar Rutas en urls.py
+Edita el archivo urls.py dentro de django_project/ y vincula tu vista a la ruta raíz:
+from django.contrib import admin
+from django.urls import path
+from .views import HomeView
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', HomeView.as_view(), name='home'),
+]
+
+---
+
+## 🚦 9. Ejecutar el Proyecto
+Levanta el servidor para ver tu proyecto en acción:
+python manage.py runserver
+
+Abre tu navegador en: http://127.0.0.1:8000
+
+---
+
+✅ ¡Listo!
+Tu entorno ya está preparado y tu primera plantilla HTML debería estar visible. Si tienes dudas o necesitas ayuda adicional, ¡revisa los comentarios en el código o consulta los apuntes del curso!
