@@ -15,9 +15,22 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include  # `include` permite agregar rutas definidas en otras apps
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include("django_app.urls"))
+
+    # Aquí usamos `include()` para enlazar las rutas definidas en django_app/urls.py.
+    # Esto permite mantener el enrutamiento modular y organizado por aplicación.
+    path('', include("django_app.urls"))  # La raíz del sitio web delega sus URLs a la app django_app
 ]
+
+"""
+    🧭 Esta es una ruta *vacía*, representada por las comillas: ''.
+    Significa que cuando el usuario accede directamente a la raíz del sitio web (por ejemplo, 'http://localhost:8000/'),
+    Django mostrara la vista asignada a esta ruta
+
+    ⚠️ Es importante entender que '' no es un nombre de carpeta, sino la parte inicial de la URL.
+    Si en lugar de '' pusieras 'blog/', entonces Django buscaría las vistas en 'django_app.urls'
+    solo si el usuario accede a 'http://localhost:8000/blog/'.
+"""

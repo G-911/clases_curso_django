@@ -1,4 +1,16 @@
-## 📚 Cómo ejecutar cada clase
+# 📁 1. Clonar el Repositorio
+
+Descarga el código del proyecto desde GitHub:
+
+```bash
+git clone https://github.com/G-911/clases_curso_django.git
+cd CursoDjango
+cd 01-Instalar_y_configurar_django_para_mostrar_un_html
+```
+
+---
+
+# 📚 2. Cómo ejecutar cada clase
 
 En este repositorio encontrarás múltiples carpetas, cada una correspondiente a una clase diferente del curso. Para ejecutar una clase específica, sigue estos pasos:
 
@@ -7,5 +19,16 @@ En este repositorio encontrarás múltiples carpetas, cada una correspondiente a
 
 ```bash
 cd '<nombre-de-la-carpeta-de-la-clase>'
+```
+
+---
+
+# 📦 3. Instalar las Dependencias
+Instala las librerías necesarias para el proyecto:
+```bash 
+pip install -r requirements.txt
+```
+
+---
 
 ⚠️ Importante: Asegúrate de que estás dentro de la carpeta correcta antes de ejecutar comandos como python manage.py runserver, instalar dependencias o activar el entorno virtual.

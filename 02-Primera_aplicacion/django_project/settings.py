@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django_app'  # Declaramos la aplicacion que acabamos de crear
+    'django_app'  # Nuestra app personalizada que acabamos de crear
 ]
 
 MIDDLEWARE = [
@@ -55,7 +55,7 @@ ROOT_URLCONF = 'django_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "templates"],  # Definimos la ruta de nuestra carpeta `templates`
+        'DIRS': [BASE_DIR / "templates"],  # Directorio personalizado donde almacenamos nuestras plantillas HTML
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
