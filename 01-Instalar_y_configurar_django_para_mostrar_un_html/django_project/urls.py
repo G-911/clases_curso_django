@@ -20,7 +20,7 @@ from .view import HomeView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', HomeView.as_view(), name='home')
+    path('', HomeView.as_view(), name='home'),
     """
     Esta ruta vacía ('') representa la raíz del sitio web: http://localhost:8000/
     Cuando un usuario accede a esa URL sin ninguna subruta adicional,
