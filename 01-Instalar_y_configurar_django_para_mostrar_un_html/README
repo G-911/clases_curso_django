@@ -28,16 +28,19 @@ Este proyecto forma parte del curso de Django. A continuación se detallan los p
 
 ---
 
-## 📌 Nota Importante
+# 📌 Nota Importante
 
-Para crear el proyecto Django desde cero, usa el siguiente comando en la terminal:
+## 1. Para crear el proyecto Django desde cero, usa el siguiente comando en la terminal:
 
 ```bash
 django-admin startproject <nombre-del-proyecto> .
 
-No olvidar el espacio punto despues del nombre del proyecto
+No olvidar el `ESPACIO PUNTO` despues del nombre del proyecto
+```
 
 ---
+
+## 2. Recordar el archivo `.gitginore` para evitar subir la carpeta del entorno virtual
 
 ## 🔧 1. Requisitos Previos
 
@@ -57,7 +60,7 @@ Descarga el código del proyecto desde GitHub:
 git clone https://github.com/G-911/clases_curso_django.git
 cd CursoDjango
 cd 01-Instalar_y_configurar_django_para_mostrar_un_html
-
+```
 
 ## 🐍 3. Crear y Activar un Entorno Virtual
 Este entorno te ayudará a gestionar las dependencias de forma aislada:
