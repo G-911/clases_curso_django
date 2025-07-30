@@ -1,0 +1,143 @@
+# 🧠 Clase 2: Construyendo "Inicio del Curso" – Aplicación Web con Django y Plantillas HTML
+
+En esta segunda clase del curso de Django, aprenderás a crear desde cero un proyecto llamado `django_project`, desarrollar una aplicación llamada `Django_app`, y construir una primera página web con plantilla HTML (`home.html`) que le dará la bienvenida al usuario.
+
+La app se titula **“Inicio del Curso”** porque será la base para todos los proyectos futuros: una vista simple pero esencial que enseña cómo organizar el código, configurar rutas y comenzar a trabajar con vistas basadas en clases. ¡Tu primer hito como desarrollador web en Django comienza aquí!
+
+---
+
+## 🎯 Objetivos de la Clase
+
+- Crear un entorno virtual y un proyecto Django.
+- Crear la app `Django_app` dentro del proyecto.
+- Configurar el entorno para usar plantillas HTML.
+- Renderizar la vista `home.html` usando `TemplateView`.
+- Visualizar la página en el navegador mediante configuración en `urls.py`.
+
+---
+
+## 🛠️ Lo Que Aprenderás
+
+- Cómo iniciar un proyecto Django desde cero.
+- Cómo estructurar una app Django y vincularla al proyecto.
+- Cómo configurar la carpeta `templates` para usar archivos HTML.
+- Cómo definir rutas y vistas usando clases.
+
+---
+
+## 🚀 Guía Paso a Paso
+
+### 🔧 1. Requisitos Previos
+
+Asegúrate de tener instalado:
+
+- ✅ Python 3.10 o superior
+- ✅ pip (gestor de paquetes de Python)
+- ✅ virtualenv *(opcional pero recomendado)*
+
+---
+
+### 🐍 2. Crear y Activar un Entorno Virtual
+
+```bash
+python -m venv env
+
+# Activar el entorno:
+source env/bin/activate     # En Linux/macOS
+env\Scripts\activate        # En Windows
+```
+
+---
+
+### 📦 3. Instalar Django
+```bash
+pip install django  # Descarga django
+```
+
+---
+
+### 📁 4. Crear el Proyecto Django
+```bash
+django-admin startproject django_project .  # Esto genera la carpeta django_project/ dentro de tu proyecto
+```
+
+#### 🔸 Nota: No olvides el espacio y el punto (.) al final para instalar el proyecto en la carpeta actual.
+
+---
+
+### 🏗️ 5. Crear la App Django
+```bash
+python manage.py startapp Django_app  # Esto generará la carpeta Django_app/ dentro de tu proyecto.
+```  
+
+---
+
+### ⚙️ 6. Registrar la App en settings.py
+Edita django_project/settings.py y agrega 'Django_app' en INSTALLED_APPS:
+INSTALLED_APPS = [
+    ...
+    'Django_app',
+]
+
+---
+
+### 🗂️ 7. Crear la Carpeta de Templates y home.html
+Dentro de Django_app/, crea una carpeta llamada templates y dentro de ella el archivo home.html:
+<!-- Django_app/templates/home.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inicio del curso</title>
+</head>
+<body>
+    <h1>¡Bienvenidos a Django! 🎉</h1>
+    <p>Esta es su primera vista HTML funcionando.</p>
+</body>
+</html>
+
+---
+
+### 🧭 8. Configurar settings.py para Templates
+En el bloque TEMPLATES, ajusta la clave DIRS:
+TEMPLATES = [
+    {
+        'DIRS': [BASE_DIR / 'Django_app' / 'templates'],
+        ...
+    },
+]
+
+---
+
+### 👁️ 9. Crear la Vista en views.py
+En Django_app/views.py:
+from django.views.generic import TemplateView
+
+class HomeView(TemplateView):
+    template_name = "home.html"
+
+---
+
+### 🛣️ 10. Configurar Rutas en urls.py
+Edita django_project/urls.py:
+from django.contrib import admin
+from django.urls import path
+from Django_app.views import HomeView
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', HomeView.as_view(), name='home'),
+]
+
+---
+
+### 🚦 11. Levantar el Servidor
+```bash
+python manage.py runserver  # Esto levanta el servidor
+```
+
+Abre tu navegador en:
+
+---
+
+✅ ¡Listo!
+Tu primer proyecto Django está funcionando y mostrando home.html. Esta es una base excelente para comenzar a explorar más funciones de Django.
