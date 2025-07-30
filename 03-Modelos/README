@@ -1,18 +1,21 @@
-# 🧠 Clase 2: Construyendo "Inicio del Curso" – Aplicación Web con Django y Plantillas HTML
+# 🧠 Clase 3: Integrando Modelos y Mostrando Datos en HTML – Aplicación Web con Django
 
-En esta segunda clase del curso de Django, aprenderás a crear desde cero un proyecto llamado `django_project`, desarrollar una aplicación llamada `Django_app`, y construir una primera página web con plantilla HTML (`home.html`) que le dará la bienvenida al usuario.
+En esta tercera clase del curso de Django, continuarás construyendo sobre la base de tu proyecto django_project y tu aplicación Django_app. Esta vez, el enfoque será en la integración de modelos para manejar y almacenar datos, y cómo mostrar esos datos dinámicamente en tus plantillas HTML.
 
-La app se titula **“Inicio del Curso”** porque será la base para todos los proyectos futuros: una vista simple pero esencial que enseña cómo organizar el código, configurar rutas y comenzar a trabajar con vistas basadas en clases. ¡Tu primer hito como desarrollador web en Django comienza aquí!
+La app sigue siendo “Inicio del Curso”, pero ahora es más potente. Aprenderás a definir la estructura de tus datos con modelos, a guardar información en tu base de datos y a recuperarla para presentarla al usuario. ¡Este es un paso crucial para crear aplicaciones web interactivas y con contenido dinámico!
 
 ---
 
 ## 🎯 Objetivos de la Clase
 
-- Crear un entorno virtual y un proyecto Django.
-- Crear la app `Django_app` dentro del proyecto.
-- Configurar el entorno para usar plantillas HTML.
-- Renderizar la vista `home.html` usando `TemplateView`.
-- Visualizar la página en el navegador mediante configuración en `urls.py`.
+- Crear un entorno virtual y un proyecto Django (repaso).
+- Crear la app Django_app dentro del proyecto (repaso).
+- Configurar el entorno para usar plantillas HTML (repaso).
+- Renderizar la vista home.html usando TemplateView (repaso).
+- Crear un modelo simple en Django para almacenar información.
+- Realizar migraciones para aplicar el modelo a la base de datos.
+- Mostrar datos del modelo en la plantilla HTML usando el contexto de la vista.
+- Visualizar la página en el navegador mediante configuración en urls.py.
 
 ---
 
@@ -20,8 +23,11 @@ La app se titula **“Inicio del Curso”** porque será la base para todos los 
 
 - Cómo iniciar un proyecto Django desde cero.
 - Cómo estructurar una app Django y vincularla al proyecto.
-- Cómo configurar la carpeta `templates` para usar archivos HTML.
+- Cómo configurar la carpeta templates para usar archivos HTML.
 - Cómo definir rutas y vistas usando clases.
+- Cómo definir modelos en Django para representar y organizar tus datos.
+- Cómo usar el ORM (Object-Relational Mapper) de Django para interactuar con la base de datos sin SQL directo.
+- Cómo pasar datos de un modelo (o cualquier otro dato) desde la vista a una plantilla HTML.
 
 ---
 
@@ -72,72 +78,147 @@ python manage.py startapp Django_app  # Esto generará la carpeta Django_app/ de
 
 ---
 
-### ⚙️ 6. Registrar la App en settings.py
+### ⚙️ 6. Registrar la App en el proyecto
+
+#### 1. Settings.py
 Edita django_project/settings.py y agrega 'Django_app' en INSTALLED_APPS:
+
 INSTALLED_APPS = [
     ...
     'Django_app',
 ]
 
+#### 2. urls.py
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('django_app.urls'))  # La raíz del sitio web delega sus URLs a la app django_app
+]
+
 ---
 
-### 🗂️ 7. Crear la Carpeta de Templates y home.html
-Dentro de Django_app/, crea una carpeta llamada templates y dentro de ella el archivo home.html:
-<!-- Django_app/templates/home.html -->
+### 💾 7. Crear el Modelo en models.py
+En Django_app/models.py, define un modelo simple para almacenar un mensaje de bienvenida. Este modelo tendrá un campo para el contenido del mensaje y otro para la fecha de creación:
+
+from django.db import models
+
+class Post(models.Model):
+    title = models.TextField(max_length=200)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title
+---
+
+### 📤 8. Realizar Migraciones
+Después de crear o modificar modelos, siempre debes indicarle a Django que cree o actualice las tablas correspondientes en tu base de datos.
+```bash
+python manage.py makemigrations # Crea los archivos de migración (plan de cambios)
+python manage.py migrate        # Aplica los cambios a la base de datos (ejecuta el plan)
+```
+
+---
+
+### 📝 9. Crear la Carpeta de Templates y home.html
+Dentro de Django_app/, crea una carpeta llamada templates y dentro de ella el archivo home.html. Modificaremos home.html para que pueda mostrar el contenido de nuestro modelo dinámicamente:
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Inicio del curso</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
 <body>
-    <h1>¡Bienvenidos a Django! 🎉</h1>
-    <p>Esta es su primera vista HTML funcionando.</p>
+    {% for article in object_list %}
+        <li>{{ article.title }} - {{ article.description }}</li>
+    {% empty %}
+        <li>No articles yet.</li>
+    {% endfor %}
 </body>
 </html>
 
 ---
 
-### 🧭 8. Configurar settings.py para Templates
-En el bloque TEMPLATES, ajusta la clave DIRS:
+### 🧭 10. Configurar settings.py para Templates
+En el bloque TEMPLATES de django_project/settings.py, ajusta la clave DIRS para que Django sepa dónde buscar tus plantillas:
+
 TEMPLATES = [
     {
-        'DIRS': [BASE_DIR / 'Django_app' / 'templates'],
+        'DIRS': [BASE_DIR / 'Django_app' / 'templates'], # Asegura que Django encuentre tu carpeta 'templates'
         ...
     },
 ]
 
 ---
 
-### 👁️ 9. Crear la Vista en views.py
-En Django_app/views.py:
-from django.views.generic import TemplateView
+### 👁️ 11. Crear la Vista en views.py
+En Django_app/views.py, modificaremos la vista HomeView para que no solo renderice la plantilla, sino que también obtenga el mensaje de bienvenida de nuestro modelo y lo pase a la plantilla a través del contexto:
 
-class HomeView(TemplateView):
+from django.shortcuts import render
+from django.views.generic import ListView
+
+from .models import Post
+
+class PostListView(ListView):
     template_name = "home.html"
+    model = Post
 
 ---
 
-### 🛣️ 10. Configurar Rutas en urls.py
-Edita django_project/urls.py:
+### 🛣️ 12. Configurar Rutas en urls.py
+Edita django_project/urls.py para que la URL raíz (la ruta vacía '') apunte a nuestra HomeView:
+
 from django.contrib import admin
 from django.urls import path
-from Django_app.views import HomeView
+from Django_app.views import HomeView # Importa tu vista
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', HomeView.as_view(), name='home'),
+    path('admin/', admin.site.urls), # Ruta para el panel de administración
+    path('', HomeView.as_view(), name='home'), # Ruta para la página de inicio
 ]
 
 ---
 
-### 🚦 11. Levantar el Servidor
+### ➕ 13. Agregar un Mensaje de Bienvenida (¡Para ver el modelo en acción!)
+Para que el mensaje aparezca en tu home.html, necesitas añadir un registro en tu modelo Post. Tienes dos formas principales de hacerlo:
+
+Usando el Panel de Administración de Django (Recomendado para manejar datos):
+#### 1. Crea un superusuario para acceder al panel de administración (si no lo has hecho ya):
+
 ```bash
-python manage.py runserver  # Esto levanta el servidor
+python manage.py createsuperuser
+```
+Sigue las instrucciones en pantalla para definir tu usuario y contraseña.
+
+#### 2. Registra tu modelo en Django_app/admin.py para que sea visible en el panel:
+
+from django.contrib import admin
+from .models import Post
+
+admin.site.register(Post)
+
+#### 3. Levanta el servidor de desarrollo:
+
+```bash
+python manage.py runserver
 ```
 
-Abre tu navegador en:
+#### 4. Abre tu navegador y navega a: http://127.0.0.1:8000/admin/.
 
+#### 5. Inicia sesión con las credenciales del superusuario que creaste.
+
+#### 6. Deberías ver una sección para "Django_app" y dentro de ella, "Mensajes de bienvenida". Haz clic en "Mensajes de bienvenida" y luego en "Añadir mensaje de bienvenida" para crear tu primer registro.
+---
+
+### 🚦 14. Levantar el Servidor y Verificar
+```bash
+python manage.py runserver  # Esto levanta el servidor de desarrollo
+```
 ---
 
 ✅ ¡Listo!
-Tu primer proyecto Django está funcionando y mostrando home.html. Esta es una base excelente para comenzar a explorar más funciones de Django.
+
+Ahora tu proyecto Django no solo muestra una plantilla HTML, sino que también recupera y presenta datos desde un modelo en tu base de datos. Esto marca un hito importante, ya que has comenzado a trabajar con la persistencia de datos y la interactividad en tus aplicaciones web.
