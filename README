@@ -18,7 +18,8 @@ En este repositorio encontrarás múltiples carpetas, cada una correspondiente a
 2. Usa el comando `cd` para acceder a la carpeta del proyecto que deseas ejecutar:
 
 ```bash
-cd '<nombre-de-la-carpeta-de-la-clase>'
+cd '<nombre-de-la-carpeta-de-la-clase>'  # para entrar en una clase
+cd ..  #para retroceder
 ```
 
 ---
