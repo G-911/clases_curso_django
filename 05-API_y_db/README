@@ -1,0 +1,85 @@
+# 1. 🔧 Preparar el entorno
+## Instala Django y Django REST Framework:
+```bash
+pip install django djangorestframework
+```
+
+## Crea tu proyecto y aplicación:
+```bash
+django-admin startproject mi_api
+cd mi_api
+python manage.py startapp core
+```
+
+
+# 2. 📦 Configurar el proyecto
+## En settings.py, agrega 'rest_framework' y 'core' a INSTALLED_APPS.
+
+## Crea el modelo en core/models.py. Ejemplo:
+from django.db import models
+
+class Producto(models.Model):
+    nombre = models.CharField(max_length=100)
+    precio = models.DecimalField(max_digits=6, decimal_places=2)
+
+
+
+## 3. 🔄 Migraciones
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+
+
+# 4. 🧩 Crear el serializador
+En core/serializers.py:
+from rest_framework import serializers
+from .models import Producto
+
+class ProductoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Producto
+        fields = '__all__'
+
+
+# 5. 🧠 Crear las vistas
+En core/views.py:
+from rest_framework import viewsets
+from .models import Producto
+from .serializers import ProductoSerializer
+
+class ProductoViewSet(viewsets.ModelViewSet):
+    queryset = Producto.objects.all()
+    serializer_class = ProductoSerializer
+
+
+# 6. 🌐 Configurar las URLs
+En core/urls.py:
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import ProductoViewSet
+
+router = DefaultRouter()
+router.register(r'productos', ProductoViewSet)
+
+urlpatterns = [
+    path('', include(router.urls)),
+]
+
+
+Y en mi_api/urls.py:
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('api/', include('core.urls')),
+]
+
+
+# 7. 🚀 Ejecutar el servidor
+```bash
+python manage.py runserver
+```
+
+Accede a http://127.0.0.1:8000/api/productos/ para probar tu API.
