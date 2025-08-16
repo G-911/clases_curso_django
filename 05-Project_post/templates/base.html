@@ -7,9 +7,27 @@
 </head>
 <body>
     <h1>Base</h1>
+    <nav>
+    <ul>
+        {% if user.is_authenticated %}
+            <p>Hola, {{ user.username }} 👋</p>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Cerrar sesión</button>
+            </form>
+        {% else %}
+
+            <li><a href="{% url 'login' %}">iniciar sesion</a></li>
+
+            <li><a href="{% url 'signup' %}">Registrarse</a></li>
+        {% endif %}
+    </ul>
+    </nav>
+
+    <hr>
 
     {% block content %}
 
-    {% endblock content %}
+    {% endblock %}
 </body>
 </html>
