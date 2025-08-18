@@ -29,7 +29,7 @@ class PostCreateView(CreateView, LoginRequiredMixin, UserPassesTestMixin):
 class PostUpdateView(UpdateView, LoginRequiredMixin, UserPassesTestMixin):
     model = Post
     fields = ["title", "description", "image"]
-    template_name = 'crud/edit.html'
+    template_name = 'crud/update.html'
     success_url = reverse_lazy('home')
 
 
