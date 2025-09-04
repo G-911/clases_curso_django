@@ -1,6 +1,6 @@
 # 🧠 Clase 3: Integrando Modelos y Mostrando Datos en HTML – Aplicación Web con Django
 
-En esta tercera clase del curso de Django, continuarás construyendo sobre la base de tu proyecto django_project y tu aplicación Django_app. Esta vez, el enfoque será en la integración de modelos para manejar y almacenar datos, y cómo mostrar esos datos dinámicamente en tus plantillas HTML.
+En esta tercera clase del curso de Django, continuarás construyendo sobre la base de tu proyecto django_project y tu aplicación post. Esta vez, el enfoque será en la integración de modelos para manejar y almacenar datos, y cómo mostrar esos datos dinámicamente en tus plantillas HTML.
 
 La app sigue siendo “Inicio del Curso”, pero ahora es más potente. Aprenderás a definir la estructura de tus datos con modelos, a guardar información en tu base de datos y a recuperarla para presentarla al usuario. ¡Este es un paso crucial para crear aplicaciones web interactivas y con contenido dinámico!
 
@@ -9,7 +9,7 @@ La app sigue siendo “Inicio del Curso”, pero ahora es más potente. Aprender
 ## 🎯 Objetivos de la Clase
 
 - Crear un entorno virtual y un proyecto Django (repaso).
-- Crear la app Django_app dentro del proyecto (repaso).
+- Crear la app post dentro del proyecto (repaso).
 - Configurar el entorno para usar plantillas HTML (repaso).
 - Renderizar la vista home.html usando TemplateView (repaso).
 - Crear un modelo simple en Django para almacenar información.
@@ -73,7 +73,7 @@ django-admin startproject django_project .  # Esto genera la carpeta django_proj
 
 ### 🏗️ 5. Crear la App Django
 ```bash
-python manage.py startapp Django_app  # Esto generará la carpeta Django_app/ dentro de tu proyecto.
+python manage.py startapp post  # Esto generará la carpeta post/ dentro de tu proyecto.
 ```  
 
 ---
@@ -81,11 +81,11 @@ python manage.py startapp Django_app  # Esto generará la carpeta Django_app/ de
 ### ⚙️ 6. Registrar la App en el proyecto
 
 #### 1. Settings.py
-Edita django_project/settings.py y agrega 'Django_app' en INSTALLED_APPS:
+Edita django_project/settings.py y agrega 'post' en INSTALLED_APPS:
 
 INSTALLED_APPS = [
     ...
-    'Django_app',
+    'post',
 ]
 
 #### 2. urls.py
@@ -94,13 +94,13 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('django_app.urls'))  # La raíz del sitio web delega sus URLs a la app django_app
+    path('', include('post.urls'))  # La raíz del sitio web delega sus URLs a la app post
 ]
 
 ---
 
 ### 💾 7. Crear el Modelo en models.py
-En Django_app/models.py, define un modelo simple para almacenar un mensaje de bienvenida. Este modelo tendrá un campo para el contenido del mensaje y otro para la fecha de creación:
+En post/models.py, define un modelo simple para almacenar un mensaje de bienvenida. Este modelo tendrá un campo para el contenido del mensaje y otro para la fecha de creación:
 
 from django.db import models
 
@@ -121,9 +121,33 @@ python manage.py migrate        # Aplica los cambios a la base de datos (ejecuta
 
 ---
 
-### 📝 9. Crear la Carpeta de Templates y home.html
-Dentro de Django_app/, crea una carpeta llamada templates y dentro de ella el archivo home.html. Modificaremos home.html para que pueda mostrar el contenido de nuestro modelo dinámicamente:
+### 📝 9. Crear la Carpeta de Templates con base.html, home.html, detail.html
+Crea una carpeta llamada templates y dentro de ella el archivo home.html. Modificaremos home.html para que pueda mostrar el contenido de nuestro modelo dinámicamente:
+<!-- templates/home.html -->
+{% extends 'base.html' %}
 
+{% block content %}
+
+  {% if user.is_authenticated %}
+    <a href="{% url 'create' %}">Crear nueva publicación</a>
+  {% endif %}
+
+  <ul>
+    {% for post in object_list %}
+      <li>
+        <a href="{% url 'detail' post.pk %}">{{ post.title }}</a>
+
+        {% if user.is_authenticated and post.author == user %}
+          | <a href="{% url 'edit' post.pk %}">Editar</a>
+          | <a href="{% url 'delete' post.pk %}">Eliminar</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}
+
+<!-- templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -132,13 +156,55 @@ Dentro de Django_app/, crea una carpeta llamada templates y dentro de ella el ar
     <title>Document</title>
 </head>
 <body>
-    {% for article in object_list %}
-        <li>{{ article.title }} - {{ article.description }}</li>
-    {% empty %}
-        <li>No articles yet.</li>
-    {% endfor %}
-</body>
-</html>
+    <h1>Bienvenido{% if user.is_authenticated %}, {{ user.username }}{% endif %}</h1>
+
+    <nav>
+    <ul>
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Cerrar sesión</button>
+            </form>
+        {% else %}
+            <li><form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Iniciar sesión</button>
+            </form></li>
+
+            <li><a href="{% url 'signup' %}">Registrarse</a></li>
+        {% endif %}
+    </ul>
+    </nav>
+
+    <p>Este es un ejemplo básico para mostrar cómo navegar entre vistas de autenticación.</p>
+
+
+    {% block content %}
+
+    {% endblock %}
+
+<!-- templates/detail.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Detail</h2>
+    <!-- Título del post -->
+    <h1>{{ post.title }}</h1>
+    
+    <!-- Descripción completa -->
+        <p>{{ post.description }}</p>
+    
+    <!-- Imagen (si existe) -->
+  {% if object.image %}
+    <img src="{{ object.image.url }}" alt="Imagen del post">
+  {% endif %}
+
+  {% if user.is_authenticated and object.author == user %}
+    <a href="{% url 'edit' object.pk %}">Editar</a>
+    <a href="{% url 'delete' object.pk %}">Eliminar</a>
+  {% endif %}
+{% endblock %}
 
 ---
 
@@ -147,7 +213,7 @@ En el bloque TEMPLATES de django_project/settings.py, ajusta la clave DIRS para 
 
 TEMPLATES = [
     {
-        'DIRS': [BASE_DIR / 'Django_app' / 'templates'], # Asegura que Django encuentre tu carpeta 'templates'
+        'DIRS': [BASE_DIR / 'templates'], # Asegura que Django encuentre tu carpeta 'templates'
         ...
     },
 ]
@@ -155,7 +221,7 @@ TEMPLATES = [
 ---
 
 ### 👁️ 11. Crear la Vista en views.py
-En Django_app/views.py, modificaremos la vista HomeView para que no solo renderice la plantilla, sino que también obtenga el mensaje de bienvenida de nuestro modelo y lo pase a la plantilla a través del contexto:
+En post/views.py, modificaremos la vista HomeView para que no solo renderice la plantilla, sino que también obtenga el mensaje de bienvenida de nuestro modelo y lo pase a la plantilla a través del contexto:
 
 from django.shortcuts import render
 from django.views.generic import ListView
@@ -173,7 +239,7 @@ Edita django_project/urls.py para que la URL raíz (la ruta vacía '') apunte a 
 
 from django.contrib import admin
 from django.urls import path
-from Django_app.views import HomeView # Importa tu vista
+from post.views import HomeView # Importa tu vista
 
 urlpatterns = [
     path('admin/', admin.site.urls), # Ruta para el panel de administración
@@ -193,7 +259,7 @@ python manage.py createsuperuser
 ```
 Sigue las instrucciones en pantalla para definir tu usuario y contraseña.
 
-#### 2. Registra tu modelo en Django_app/admin.py para que sea visible en el panel:
+#### 2. Registra tu modelo en post/admin.py para que sea visible en el panel:
 
 from django.contrib import admin
 from .models import Post
@@ -210,15 +276,94 @@ python manage.py runserver
 
 #### 5. Inicia sesión con las credenciales del superusuario que creaste.
 
-#### 6. Deberías ver una sección para "Django_app" y dentro de ella, "Mensajes de bienvenida". Haz clic en "Mensajes de bienvenida" y luego en "Añadir mensaje de bienvenida" para crear tu primer registro.
+#### 6. Deberías ver una sección para "post" y dentro de ella, "Mensajes de bienvenida". Haz clic en "Mensajes de bienvenida" y luego en "Añadir mensaje de bienvenida" para crear tu primer registro.
 ---
 
 ### 🚦 14. Levantar el Servidor y Verificar
 ```bash
 python manage.py runserver  # Esto levanta el servidor de desarrollo
 ```
+
+---
+
+### 🏗️ 15. Crear la App authentication
+```bash
+python manage.py startapp authentication   # Esto generará la carpeta authentication/ dentro de tu proyecto.
+```  
+
+---
+
+### ⚙️ 16. Registrar la App en settings.py
+Edita django_project/settings.py y agrega 'post' y 'authentication' en INSTALLED_APPS:
+INSTALLED_APPS = [
+    ...
+    'post',
+    'authentication'
+]
+
+---
+
+### 🗂️ 17. Modifica la Carpeta de Templates, crea la subcarpeta registration que contenga los archivos login.html y signup.html
+<!-- templates/registration/signup.html -->
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Iniciar sesión</button>
+</form>
+
+<!-- templates/registration/signup.html -->
+<h2>Iniciar sesión</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Entrar</button>
+</form>
+
+---
+
+### 👁️ 18. Crear la Vista en views.py
+En authentication/views.py:
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views.generic.edit import CreateView
+
+class SignUpView(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
+
+---
+
+### 🛣️ 19. Configurar Rutas en urls.py
+<!-- Edita django_project/urls.py: -->
+from django.contrib import admin
+from django.urls import path, include  
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include('post.urls')),  
+    path('accounts/', include('authentication.urls')) 
+]
+
+<!-- Edita authentication/urls.py -->
+from django.contrib import admin
+from django.urls import path, include
+from .views import SignUpView
+
+urlpatterns = [
+    path('', include('django.contrib.auth.urls')),  # ¡Esta línea es crucial!
+    path('signup/', SignUpView.as_view(), name='signup'),
+]
+
+---
+
+### 🚦 20. Levantar el Servidor
+```bash
+python manage.py runserver  # Esto levanta el servidor
+```
+
+Abre tu navegador en:  http://127.0.0.1:8000/  
+
 ---
 
 ✅ ¡Listo!
-
-Ahora tu proyecto Django no solo muestra una plantilla HTML, sino que también recupera y presenta datos desde un modelo en tu base de datos. Esto marca un hito importante, ya que has comenzado a trabajar con la persistencia de datos y la interactividad en tus aplicaciones web.

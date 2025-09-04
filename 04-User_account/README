@@ -66,15 +66,17 @@ django-admin startproject django_project .  # Esto genera la carpeta django_proj
 ### 🏗️ 5. Crear la App Django
 ```bash
 python manage.py startapp Django_app  # Esto generará la carpeta Django_app/ dentro de tu proyecto.
+python manage.py startapp authentication   # Esto generará la carpeta authentication/ dentro de tu proyecto.
 ```  
 
 ---
 
 ### ⚙️ 6. Registrar la App en settings.py
-Edita django_project/settings.py y agrega 'Django_app' en INSTALLED_APPS:
+Edita django_project/settings.py y agrega 'django_app' y 'authentication' en INSTALLED_APPS:
 INSTALLED_APPS = [
     ...
-    'Django_app',
+    'django_app',
+    'authentication'
 ]
 
 ---
@@ -183,7 +185,7 @@ urlpatterns = [
     path('accounts/', include('authentication.urls')) 
 ]
 
-<!-- Edita django_app/urls.py -->
+<!-- Edita authentication/urls.py -->
 from django.contrib import admin
 from django.urls import path, include
 from .views import SignUpView
