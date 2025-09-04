@@ -19,6 +19,6 @@ from django.urls import path, include  # importamos el include para registrar to
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('post.urls')),  # creamos una ruta con la direccion del archivo urls dentro de nuestra app post
+    path('', include('django_app.urls')),  # creamos una ruta con la direccion del archivo urls dentro de nuestra app post
     path('accounts/', include('authentication.urls'))  # creamos una ruta con la direccion del archivo urls dentro de nuestra app authentication
 ]

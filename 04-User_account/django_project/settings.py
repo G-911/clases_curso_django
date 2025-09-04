@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'post',  # registramos la aplicacion que va a administrar nuestras publicaciones
+    'django_app',  # registramos la aplicacion que va a administrar nuestras publicaciones
     'authentication'  # registramos la aplicacion que va a manejar nuestros usuarios
 ]
 
