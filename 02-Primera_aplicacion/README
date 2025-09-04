@@ -81,9 +81,9 @@ INSTALLED_APPS = [
 
 ---
 
-### 🗂️ 7. Crear la Carpeta de Templates y home.html
+### 🗂️ 7. Crear la Carpeta de Templates, home.html y base.html
 Dentro de Django_app/, crea una carpeta llamada templates y dentro de ella el archivo home.html:
-<!-- Django_app/templates/home.html -->
+<!-- templates/home.html -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -101,7 +101,7 @@ Dentro de Django_app/, crea una carpeta llamada templates y dentro de ella el ar
 En el bloque TEMPLATES, ajusta la clave DIRS:
 TEMPLATES = [
     {
-        'DIRS': [BASE_DIR / 'Django_app' / 'templates'],
+        'DIRS': [BASE_DIR / 'templates'],
         ...
     },
 ]
@@ -118,7 +118,7 @@ class HomeView(TemplateView):
 ---
 
 ### 🛣️ 10. Configurar Rutas en urls.py
-Edita django_project/urls.py:
+<!-- Edita django_project/urls.py: -->
 from django.contrib import admin
 from django.urls import path
 from Django_app.views import HomeView
@@ -128,6 +128,15 @@ urlpatterns = [
     path('', HomeView.as_view(), name='home'),
 ]
 
+<!-- Edita django_app/urls.py: -->
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include("django_app.urls")) 
+]
+
 ---
 
 ### 🚦 11. Levantar el Servidor
@@ -135,7 +144,7 @@ urlpatterns = [
 python manage.py runserver  # Esto levanta el servidor
 ```
 
-Abre tu navegador en:
+Abre tu navegador en: http://127.0.0.1:8000/ 
 
 ---
 
