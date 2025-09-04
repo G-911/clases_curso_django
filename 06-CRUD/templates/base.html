@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+        <h1>Bienvenido{% if user.is_authenticated %}, {{ user.username }}{% endif %}</h1>
+
+    <nav>
+    <ul>
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Cerrar sesión</button>
+            </form>
+        {% else %}
+            <li><form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Iniciar sesión</button>
+            </form></li>
+
+            <li><a href="{% url 'signup' %}">Registrarse</a></li>
+        {% endif %}
+    </ul>
+    </nav>
+
+    {% block content %}
+
+    {% endblock %}
+</body>
+</html>

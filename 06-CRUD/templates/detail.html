@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Detail</h2>
+    <!-- Título del post -->
+    <h1>{{ post.title }}</h1>
+    
+    <!-- Descripción completa -->
+        <p>{{ post.description }}</p>
+    
+    <!-- Imagen (si existe) -->
+  {% if object.image %}
+    <img src="{{ object.image.url }}" alt="Imagen del post">
+  {% endif %}
+
+  {% if user.is_authenticated and object.author == user %}
+    <a href="{% url 'edit' object.pk %}">Editar</a>
+    <a href="{% url 'delete' object.pk %}">Eliminar</a>
+  {% endif %}
+{% endblock %}
