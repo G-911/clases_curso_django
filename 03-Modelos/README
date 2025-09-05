@@ -122,7 +122,7 @@ python manage.py migrate        # Aplica los cambios a la base de datos (ejecuta
 ---
 
 ### 📝 9. Crear la Carpeta de Templates y home.html
-Crea una carpeta llamada templates y dentro de ella el archivo home.html. Modificaremos home.html para que pueda mostrar el contenido de nuestro modelo dinámicamente:
+Dentro de Django_app/, crea una carpeta llamada templates y dentro de ella el archivo home.html. Modificaremos home.html para que pueda mostrar el contenido de nuestro modelo dinámicamente:
 
 <!DOCTYPE html>
 <html lang="en">
@@ -211,7 +211,6 @@ python manage.py runserver
 #### 5. Inicia sesión con las credenciales del superusuario que creaste.
 
 #### 6. Deberías ver una sección para "Django_app" y dentro de ella, "Mensajes de bienvenida". Haz clic en "Mensajes de bienvenida" y luego en "Añadir mensaje de bienvenida" para crear tu primer registro.
-
 ---
 
 ### 🚦 14. Levantar el Servidor y Verificar
@@ -219,15 +218,6 @@ python manage.py runserver
 python manage.py runserver  # Esto levanta el servidor de desarrollo
 ```
 ---
-
-
-
-
-
-
-
-
-
 
 ✅ ¡Listo!
 
