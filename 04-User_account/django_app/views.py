@@ -5,6 +5,7 @@ from .models import Post
 
 # Create your views here.
 
+
 class PostView(ListView):
-    template_name = 'home.html'
+    template_name = "home.html"
     model = Post

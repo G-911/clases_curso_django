@@ -14,20 +14,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path
 from .view import HomeView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', HomeView.as_view(), name='home'),
+    path("admin/", admin.site.urls),
+    path("", HomeView.as_view(), name="home"),
     """
     Esta ruta vacía ('') representa la raíz del sitio web: http://localhost:8000/
     Cuando un usuario accede a esa URL sin ninguna subruta adicional,
     Django ejecuta la vista HomeView para mostrar la página principal.
     El método as_view() convierte la clase HomeView en una vista funcional que Django puede usar.
     Además, el parámetro name='home' permite referirse a esta URL desde plantillas con {% url 'home' %}
-    """
+    """,
 ]
 
 """

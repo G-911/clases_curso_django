@@ -1,5 +1,9 @@
-from django.contrib import admin # Importa el módulo 'admin' de Django. Este es el corazón del panel de administración.
-from .models import Post         # Importa tu modelo 'Post' desde el archivo models.py de la misma aplicación.
+from django.contrib import (
+    admin,
+)  # Importa el módulo 'admin' de Django. Este es el corazón del panel de administración.
+from .models import (
+    Post,
+)  # Importa tu modelo 'Post' desde el archivo models.py de la misma aplicación.
 
 # Aquí es donde le dices a Django qué modelos de tu aplicación quieres que aparezcan
 # en el panel de administración. Esto es muy útil para gestionar tus datos

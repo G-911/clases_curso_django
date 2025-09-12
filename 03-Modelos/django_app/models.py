@@ -1,7 +1,10 @@
-from django.db import models # Importamos 'models' de Django, que nos permite definir modelos para nuestra base de datos.
+from django.db import (
+    models,
+)  # Importamos 'models' de Django, que nos permite definir modelos para nuestra base de datos.
 
 # Aquí es donde definimos nuestros modelos. Un modelo es como un plano o esquema
 # de cómo se verán los datos que queremos guardar en nuestra base de datos.
+
 
 # Creamos una clase llamada 'Post'. Cada 'Post' que creemos en nuestra aplicación
 # será un objeto basado en este plano.
@@ -15,7 +18,9 @@ class Post(models.Model):
     # lo que sugiere que quiere un campo de texto más corto como 'CharField'.
     # Si el título es corto, 'CharField' es mejor. Si es largo, 'TextField'.
     # Para este ejemplo, mantendremos 'TextField' pero con 'max_length' como lo tenías.
-    title = models.TextField(max_length=200) # 'max_length' es el número máximo de caracteres que puede tener el título.
+    title = models.TextField(
+        max_length=200
+    )  # 'max_length' es el número máximo de caracteres que puede tener el título.
 
     # 'description' (descripción): Otro campo de texto, ideal para el contenido principal del post.
     # 'models.TextField()' se usa para textos largos, como el cuerpo de un artículo.
@@ -27,4 +32,4 @@ class Post(models.Model):
     # Aquí, le decimos que muestre el 'title' (título) del post, lo cual es muy útil
     # para identificar cada post fácilmente.
     def __str__(self):
-        return self.title # Retorna el título del post como su representación en texto.
+        return self.title  # Retorna el título del post como su representación en texto.

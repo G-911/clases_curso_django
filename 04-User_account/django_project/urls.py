@@ -14,11 +14,19 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
-from django.urls import path, include  # importamos el include para registrar todas las urls de nuestras aplicaciones
+from django.urls import (
+    path,
+    include,
+)  # importamos el include para registrar todas las urls de nuestras aplicaciones
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', include('django_app.urls')),  # creamos una ruta con la direccion del archivo urls dentro de nuestra app post
-    path('accounts/', include('authentication.urls'))  # creamos una ruta con la direccion del archivo urls dentro de nuestra app authentication
+    path("admin/", admin.site.urls),
+    path(
+        "", include("django_app.urls")
+    ),  # creamos una ruta con la direccion del archivo urls dentro de nuestra app post
+    path(
+        "accounts/", include("authentication.urls")
+    ),  # creamos una ruta con la direccion del archivo urls dentro de nuestra app authentication
 ]
